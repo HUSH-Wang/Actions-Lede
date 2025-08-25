@@ -25,12 +25,15 @@ env:
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
-  UPLOAD_RELEASE: false
+  UPLOAD_RELEASE: false # need contents WRITE permission if enable
   TZ: Asia/Shanghai
 
 jobs:
   build:
     runs-on: ubuntu-22.04
+    permissions:
+      actions: write
+      contents: read
 
     steps:
     - name: Check Server Performance
@@ -117,7 +120,6 @@ jobs:
           toolchain: true # 是否缓存工具链目录
           skip: true # 是否跳过工具链编译
           prefix: /workdir/openwrt
-
 
     - name: Load custom feeds
       run: |
