@@ -63,8 +63,15 @@ jobs:
     #     docker-images: true
     #     swap-storage: false
 
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      with:
+        detached: true
+
     - name: Checkout
       uses: actions/checkout@main
+      with:
+        fetch-depth: 0 # for toolchan cache
 
     - name: Initialization environment
       env:
@@ -102,6 +109,15 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+    - name: Use Build Cache
+      uses: klever1988/cachewrtbuild@main
+      with:
+          ccache: false # 是否一并缓存.ccache目录，如果你启用了ccache
+          toolchain: true # 是否缓存工具链目录
+          skip: true # 是否跳过工具链编译
+          prefix: /workdir/openwrt
+
 
     - name: Load custom feeds
       run: |
